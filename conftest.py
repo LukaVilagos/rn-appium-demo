@@ -1,6 +1,7 @@
 import os
 import pytest
 import logging
+import datetime
 from appium import webdriver
 from appium.options.android import UiAutomator2Options
 
@@ -28,3 +29,14 @@ def driver():
     driver_instance = webdriver.Remote(EXECUTOR, options=options)
     yield driver_instance
     driver_instance.quit()
+    
+def pytest_configure(config):
+    reports_dir = "reports"
+    if not os.path.exists(reports_dir):
+        os.makedirs(reports_dir)
+
+    now = datetime.datetime.now()
+    report_filename = now.strftime("%Y-%m-%d_%H-%M-%S_report.html")
+
+    report_path = os.path.join(reports_dir, report_filename)
+    config.option.htmlpath = report_path

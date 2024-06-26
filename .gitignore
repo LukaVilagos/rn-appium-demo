@@ -1,8 +1,12 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
-android/
 *.py[cod]
 *$py.class
+
+# Project specific
+android/
+reports/
+screenshots/
 
 # C extensions
 *.so

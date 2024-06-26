@@ -1,6 +1,6 @@
 import time
 
-def test_app_inspect():
+def test_app_inspect(driver):
     try:
         print("Appium session is running. Press Ctrl+C to quit.")
         while True:

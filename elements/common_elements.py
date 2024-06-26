@@ -1,5 +1,5 @@
-from elements.selector import Selector
-from elements.selector import SelectorType
+from classes.Selector import Selector
+from classes.Selector import SelectorType
 
 class CommonElements:
     

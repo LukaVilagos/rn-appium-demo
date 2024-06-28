@@ -1,0 +1,15 @@
+{% extends "base.html" %} {% block content %}
+<h1 class="text-2xl font-bold">Screenshots</h1>
+<div class="mt-3 grid grid-cols-4 gap-4">
+  {% for screenshot in screenshots %}
+  <div>
+    <img
+      src="\{{ screenshot[1] }}"
+      class="card-img-top"
+      alt="{{ screenshot[0] }}"
+    />
+    <p>{{ screenshot[0]}}</p>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

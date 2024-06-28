@@ -1,0 +1,14 @@
+{% extends "base.html" %} {% block content %}
+<ul class="flex flex-col gap-2 pt-4 bg-gray-100 rounded-lg p-4">
+  <h1 class="text-2xl font-bold">Reports</h1>
+  {% for report in reports %}
+  <li class="hover:underline hover:text-blue-400 bg-gray-200 rounded-lg p-2">
+    <a
+      href="{{ url_for('download_report', filename=report[1]) }}"
+      target="_blank"
+      >{{ report[0] }}</a
+    >
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

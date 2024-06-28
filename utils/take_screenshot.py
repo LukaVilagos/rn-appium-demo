@@ -4,7 +4,7 @@ import datetime
 import os
 
 def take_screenshot(driver):
-    screenshots_dir = "screenshots"
+    screenshots_dir = "static/screenshots"
     if not os.path.exists(screenshots_dir):
         os.makedirs(screenshots_dir)
         

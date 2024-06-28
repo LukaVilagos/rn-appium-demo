@@ -1,13 +1,14 @@
 from appium.webdriver.common.appiumby import AppiumBy
 import elementos
 from elements.submit_elements import SubmitElements
-from elements.common_elements import CommonElements
 from elements.navigation_elements import NavigationElements
 from typing import Literal
 from utils.element_exists import element_exists
 from utils.take_screenshot import take_screenshot
+from utils.wait_and_find_element import wait_and_find_element
 import time
 import logging
+from classes.AndroidFlow import AndroidFlow
 
 logger = logging.getLogger(__name__)
 
@@ -85,6 +86,12 @@ class SubmitFlow:
     
     def get_select_date_input_empty(self):
         return self.driver.find_element(AppiumBy.ACCESSIBILITY_ID, SubmitElements.SELECT_DATE_INPUT_EMPTY.value)
+        
+    def get_select_time_input_empty(self):
+        return self.driver.find_element(AppiumBy.ACCESSIBILITY_ID, SubmitElements.SELECT_TIME_INPUT_EMPTY.value)
+    
+    def get_who_button(self):
+        return self.driver.find_element(AppiumBy.ACCESSIBILITY_ID, SubmitElements.WHO_BUTTON.value)
     
     #endregion
     
@@ -154,12 +161,12 @@ class SubmitFlow:
     def input_location_details(self, details: str):
         self.get_details_input_empty().send_keys(details)
         
-        logger.info("Verifying 'When Button' is not enabled")
+        logger.info("Verifying 'When Button' is enabled")
         assert self.get_when_button().is_enabled()
         time.sleep(1)
         
     def click_when_button(self):
-        logger.info("Verifying 'When Button' is not enabled")
+        logger.info("Verifying 'When Button' is enabled")
         assert self.get_when_button().is_enabled()
         take_screenshot(self.driver)
         
@@ -176,30 +183,40 @@ class SubmitFlow:
     def select_date(self, desired_year: str, desired_month: str, desired_day: str):
         self.get_select_date_input_empty().click()
         
-        if not self.driver.find_element(AppiumBy.XPATH, f'''//android.widget.EditText[@resource-id="android:id/numberpicker_input" and @text="{desired_month}"]'''):
+        if not element_exists(lambda: wait_and_find_element(self.driver, AppiumBy.XPATH, f'''//android.widget.EditText[@resource-id="android:id/numberpicker_input" and @text="{desired_month}"]''')):
             self.driver.find_element(AppiumBy.XPATH, f'''//android.widget.Button[@text="{desired_month}"]''').click()
             
-        if not self.driver.find_element(AppiumBy.XPATH, f'''//android.widget.EditText[@resource-id="android:id/numberpicker_input" and @text="{desired_day}"]'''):
+        if not element_exists(lambda: wait_and_find_element(self.driver, AppiumBy.XPATH, f'''//android.widget.EditText[@resource-id="android:id/numberpicker_input" and @text="{desired_day}"]''')):
             self.driver.find_element(AppiumBy.XPATH, f'''//android.widget.Button[@text="{desired_day}"]''').click()
             
-        if not self.driver.find_element(AppiumBy.XPATH, f'''//android.widget.EditText[@resource-id="android:id/numberpicker_input" and @text="{desired_year}"]'''):
+        if not element_exists(lambda: wait_and_find_element(self.driver, AppiumBy.XPATH, f'''//android.widget.EditText[@resource-id="android:id/numberpicker_input" and @text="{desired_year}"]''')):
             self.driver.find_element(AppiumBy.XPATH, f'''//android.widget.Button[@text="{desired_year}"]''').click()
             
-        CommonElements.ANDROID_OK_BUTTON.click()
+        android_flow = AndroidFlow(self.driver)
+        android_flow.get_ok_button().click()
         
-    def select_time(self, desired_period: str, desired_hour: str, desired_minute: str):
-        self.get_select_date_input_empty().click()
+    def select_time(self, desired_period: Literal["AM", "PM"], desired_hour: str, desired_minute: Literal["0", "15", "30", "45"]):
+        self.get_select_time_input_empty().click()
         
-        if not self.driver.find_element(AppiumBy.XPATH, f'''//android.widget.EditText[@resource-id="android:id/numberpicker_input" and @text="{desired_hour}"]'''):
+        if not element_exists(lambda: wait_and_find_element(self.driver, AppiumBy.XPATH, f'''//android.widget.EditText[@resource-id="android:id/numberpicker_input" and @text="{desired_hour}"]''')):
             self.driver.find_element(AppiumBy.XPATH, f'''//android.widget.Button[@text="{desired_hour}"]''').click()
             
-        if not self.driver.find_element(AppiumBy.XPATH, f'''//android.widget.EditText[@resource-id="android:id/numberpicker_input" and @text="{desired_minute}"]'''):
+        if not element_exists(lambda: wait_and_find_element(self.driver, AppiumBy.XPATH, f'''//android.widget.EditText[@resource-id="android:id/numberpicker_input" and @text="{desired_minute}"]''')):
             self.driver.find_element(AppiumBy.XPATH, f'''//android.widget.Button[@text="{desired_minute}"]''').click()
             
-        if not self.driver.find_element(AppiumBy.XPATH, f'''//android.widget.EditText[@resource-id="android:id/numberpicker_input" and @text="{desired_period}"]'''):
+        if not element_exists(lambda: wait_and_find_element(self.driver, AppiumBy.XPATH, f'''//android.widget.EditText[@resource-id="android:id/numberpicker_input" and @text="{desired_period}"]''')):
             self.driver.find_element(AppiumBy.XPATH, f'''//android.widget.Button[@text="{desired_period}"]''').click()
-            
-        CommonElements.ANDROID_OK_BUTTON.click()
+        
+        android_flow = AndroidFlow(self.driver)
+        android_flow.get_ok_button().click()    
+        
+    def click_who_button(self):
+        logger.info("Verifying 'Who Button' is not enabled")
+        assert self.get_who_button().is_enabled()
+        take_screenshot(self.driver)
+        
+        self.get_who_button().click()
+        time.sleep(1)
      
     #endregion
        

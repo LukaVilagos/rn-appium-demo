@@ -2,7 +2,6 @@ import requests
 import pytest
 
 # Appium can not test API calls, must use another library like requests
-@pytest.mark.general
 def test_API_call():
     r = requests.get('http://localhost:3000/users')
     print(r.json())
